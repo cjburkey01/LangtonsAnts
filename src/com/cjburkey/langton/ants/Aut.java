@@ -1,9 +1,12 @@
 package com.cjburkey.langton.ants;
 
+import java.awt.event.KeyListener;
 import java.io.File;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+
 import com.cjburkey.langton.ants.obj.Ant;
 import com.cjburkey.langton.ants.var.Func;
 import com.cjburkey.langton.ants.var.Main;
@@ -24,12 +27,25 @@ public class Aut {
 			
 		}
 		
+		Main.frame.getContentPane().removeAll();
+		Prog.tools.getContentPane().removeAll();
+		
+		for(int i = 0; i < Main.frame.getListeners(KeyListener.class).length; i ++) {
+			KeyListener listener = Main.frame.getListeners(KeyListener.class)[i];
+			Main.frame.removeKeyListener(listener);
+		}
+		
+		for(int i = 0; i < Prog.tools.getListeners(KeyListener.class).length; i ++) {
+			KeyListener listener = Prog.tools.getListeners(KeyListener.class)[i];
+			Prog.tools.removeKeyListener(listener);
+		}
+		
 		Prog.menuBar.add(Prog.ams);
 		
 		Main.frame.setIconImage(Prog.img);
 		Main.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Main.frame.setResizable(false);
-		Main.frame.add(Main.drawPane);
+		Main.frame.add(Prog.drawPane);
 		Main.frame.setJMenuBar(Prog.menuBar);
 		Main.frame.pack();
 		Main.frame.setLocationRelativeTo(null);
@@ -58,6 +74,8 @@ public class Aut {
 		Prog.tools.add(Prog.placeMode);
 		Prog.tools.add(Prog.random);
 		Prog.tools.add(Prog.center);
+		Prog.tools.add(Box.createVerticalStrut(25));
+		Prog.tools.add(Prog.size);
 		Prog.tools.pack();
 		Prog.tools.setLocationRelativeTo(null);
 		Prog.tools.setLocation(0, Prog.tools.getLocation().y);
@@ -165,7 +183,7 @@ public class Aut {
 		
 		Prog.ams.setText("WhiteCount: " + whites + "\t|\tBlackCount: " + blacks + "\t|\tAntCount: " + Main.ants.size() + "\t|\tSpeed: " + Main.fps + "\t|\tCycles: " + Main.cycles);
 		
-		Main.drawPane.repaint();
+		Prog.drawPane.repaint();
 		
 	}
 	

@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import com.cjburkey.langton.ants.Aut;
 import com.cjburkey.langton.ants.obj.Ant;
 import com.cjburkey.langton.ants.othercore.PlaceMode;
-import com.cjburkey.langton.ants.render.DrawPane;
 
 public class Main {
 	
@@ -26,7 +25,6 @@ public class Main {
 	public static int mapSize = Func.round((int) (screen.height - 100) / tileSize);
 	public static int[][] map = new int[mapSize][mapSize];
 	public static JFrame frame = new JFrame();
-	public static DrawPane drawPane = new DrawPane();
 	public static int fps = 20;
 	public static boolean running = false;
 	public static boolean playing = false;

@@ -24,7 +24,6 @@ import javax.swing.JTextField;
 import com.cjburkey.langton.ants.obj.Ant;
 import com.cjburkey.langton.ants.obj.MoreMath;
 import com.cjburkey.langton.ants.othercore.PlaceMode;
-import com.cjburkey.langton.ants.render.DrawPane;
 import com.cjburkey.langton.ants.render.Error;
 import com.cjburkey.langton.ants.thread.RenderLoop;
 import com.cjburkey.langton.ants.thread.TickLoop;
@@ -55,7 +54,7 @@ public class Func {
 			public void keyReleased(KeyEvent e) { }
 		});
 		
-		Main.drawPane.addMouseMotionListener(new MouseMotionListener() {
+		Prog.drawPane.addMouseMotionListener(new MouseMotionListener() {
 			public void mouseDragged(MouseEvent e) {
 				if(Main.drag) {
 					Point pos = e.getPoint();
@@ -73,7 +72,7 @@ public class Func {
 			}
 		});
 		
-		Main.drawPane.addMouseListener(new MouseListener() {
+		Prog.drawPane.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
 				if(!Main.drag) {
 					Point pos = e.getPoint();
@@ -184,20 +183,24 @@ public class Func {
 			}
 		});
 		
+		Prog.size.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setSize(-1, -1);
+			}
+		});
+		
 	}
 	
 	public static final void init() {
 		
 		Main.fFolder.mkdirs();
-		
-		Main.mapSize = round((int) (Main.screen.height - 100) / Main.tileSize);
-		Main.map = new int[Main.mapSize][Main.mapSize];
-		Main.drawPane = new DrawPane();
+		calcMap();
 		clearMap();
 		
 		if(!Main.ran) {
 			new Thread(new TickLoop()).start();
 			new Thread(new RenderLoop()).start();
+			Main.ran = true;
 		}
 		
 		System.out.println("init");
@@ -342,30 +345,28 @@ public class Func {
 				reader.readLine();
 				int tileSize = Integer.parseInt(reader.readLine());
 				int mapSize = Integer.parseInt(reader.readLine());
-				if(tileSize == Main.tileSize) {
-					int[][] map = new int[mapSize][mapSize];
-					for(int y = 0; y < mapSize; y ++) {
-						String[] yPos = reader.readLine().split("\t");
-						for(int i = 0; i < mapSize; i ++) {
-							map[i][y] = Integer.parseInt(yPos[i]);
-							System.out.print(yPos[i]);
-						}
-						System.out.println();
-					}
-					int ants = Integer.parseInt(reader.readLine());
-					ArrayList<Ant> antList = new ArrayList<Ant>();
-					for(int i = 0; i < ants; i ++) {
-						String[] params = reader.readLine().trim().split("\t");
-						Ant ant = new Ant(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
-						ant.dir = Integer.parseInt(params[2]);
-						antList.add(ant);
-					}
-					Main.ants = antList;
-					System.out.println(reader.readLine());
-					Main.map = map;
-				} else {
-					new Error("Tilesize not same with file.\n\nRestart and set tileSize to " + tileSize, "Mismatch");
+				if(tileSize != Main.tileSize) {
+					Func.setSize(tileSize, mapSize);
 				}
+				System.out.println("Might have finished, but most likely not.");
+				int[][] map = new int[Main.mapSize][Main.mapSize];
+				for(int y = 0; y < mapSize; y ++) {
+					String[] yPos = reader.readLine().split("\t");
+					for(int i = 0; i < mapSize; i ++) {
+						map[i][y] = Integer.parseInt(yPos[i]);
+					}
+				}
+				int ants = Integer.parseInt(reader.readLine());
+				ArrayList<Ant> antList = new ArrayList<Ant>();
+				for(int i = 0; i < ants; i ++) {
+					String[] params = reader.readLine().trim().split("\t");
+					Ant ant = new Ant(Integer.parseInt(params[0]), Integer.parseInt(params[1]));
+					ant.dir = Integer.parseInt(params[2]);
+					antList.add(ant);
+				}
+				Main.ants = antList;
+				System.out.println(reader.readLine());
+				Main.map = map;
 				reader.close();
 			} catch(Exception e) {
 				new Error(e.getMessage(), "Error loading file.");
@@ -378,25 +379,39 @@ public class Func {
 		Main.playing = !Main.playing;
 	}
 	
-	public static void setSize() {
-		Prog.tools.getContentPane().removeAll();
-		Prog.tools.dispose();
-		Main.frame.getContentPane().removeAll();
+	public static void setSize(int inputNum, int mapSize) {
 		JTextField input = new JTextField(10 + "");
-		JOptionPane.showMessageDialog(Main.frame, input, "Set Size (2-20)", JOptionPane.DEFAULT_OPTION);
-		int num = 0;
+		if(inputNum == -1)
+			JOptionPane.showMessageDialog(Main.frame, input, "Set Size (2-20)", JOptionPane.DEFAULT_OPTION);
+		int num = inputNum;
 		try {
-			num = Integer.parseInt(input.getText().trim().replaceAll(" ", ""));
+			if(inputNum == -1)
+				num = Integer.parseInt(input.getText().trim().replaceAll(" ", ""));
 			if(num > 20)
 				num = 20;
 			if(num < 2)
 				num = 2;
+			System.out.println("TileSize to: " + num);
 			Main.tileSize = num;
-			Func.init();
+			if(mapSize == -1)
+				calcMap();
+			else
+				calcMap(mapSize);
+			Prog.init();
+			Main.aut.frame();
 		} catch(Exception e1) {
 			new Error("Error 'can't parse letters to numbers'\n\n" + e1.getMessage(), "Enters numbers not letters");
 			e1.printStackTrace();
 		}
+	}
+	
+	public static void calcMap(int mapSize) {
+		Main.mapSize = mapSize;
+		Main.map = new int[Main.mapSize][Main.mapSize];
+	}
+	
+	public static void calcMap() {
+		calcMap(round((int) (Main.screen.height - 100) / Main.tileSize));
 	}
 	
 	public static void togglePlaceMode() {

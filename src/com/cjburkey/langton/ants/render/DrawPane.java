@@ -19,6 +19,7 @@ public class DrawPane extends JPanel {
 	public DrawPane() {
 		
 		this.setPreferredSize(new Dimension(Func.round(Main.mapSize * Main.tileSize), Func.round(Main.mapSize * Main.tileSize)));
+		System.out.println("Set size to: " + this.getPreferredSize());
 		
 	}
 	
