@@ -1,4 +1,4 @@
-package com.cjburkey.langton.ants;
+package com.cjburkey.langton.ants.render;
 
 import javax.swing.JOptionPane;
 

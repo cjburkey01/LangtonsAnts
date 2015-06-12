@@ -1,4 +1,4 @@
-package com.cjburkey.langton.ants;
+package com.cjburkey.langton.ants.obj;
 
 public class Ant {
 	
