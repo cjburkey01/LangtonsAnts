@@ -15,16 +15,16 @@ public class Run {
 	
 	public static void main(String[] args) {
 		
-		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch(Exception e) {
+		//try {
+			//UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		//} catch(Exception e) {
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch(Exception e1) {
 				new Error(e1.getMessage(), "An error ocurred!");
 				e1.printStackTrace();
 			}
-		}
+		//}
 
 		Prog.init();
 		Func.init();

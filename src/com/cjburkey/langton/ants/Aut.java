@@ -52,6 +52,7 @@ public class Aut {
 		Main.frame.setTitle("Langton's Ant by CJ Burkey");
 		Main.frame.setVisible(true);
 		Main.frame.setFocusable(true);
+		Main.frame.setCursor(Main.blankCursor);
 		Main.frame.requestFocus();
 		
 		Prog.tools.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -62,7 +63,6 @@ public class Aut {
 		Prog.tools.add(Prog.play);
 		Prog.tools.add(Prog.pause);
 		Prog.tools.add(Box.createVerticalStrut(25));
-		Prog.tools.add(Prog.clear);
 		Prog.tools.add(Prog.save);
 		Prog.tools.add(Prog.load);
 		Prog.tools.add(Prog.folder);
@@ -76,6 +76,9 @@ public class Aut {
 		Prog.tools.add(Prog.center);
 		Prog.tools.add(Box.createVerticalStrut(25));
 		Prog.tools.add(Prog.size);
+		Prog.tools.add(Box.createVerticalStrut(25));
+		Prog.tools.add(Prog.kill);
+		Prog.tools.add(Prog.clear);
 		Prog.tools.pack();
 		Prog.tools.setLocationRelativeTo(null);
 		Prog.tools.setLocation(0, Prog.tools.getLocation().y);
@@ -108,9 +111,9 @@ public class Aut {
 				if(currentTile != -1) {
 					
 					if(currentTile == 0) {
-						ant.dir ++;
-					} else {
 						ant.dir --;
+					} else {
+						ant.dir ++;
 					}
 					
 					if(ant.dir > 3) {
@@ -160,28 +163,12 @@ public class Aut {
 			
 		}
 		
-		int blacks = 0, whites = 0;
-		
-		for(int x = 0; x < Main.mapSize; x ++) {
-			
-			for(int y = 0; y < Main.mapSize; y ++) {
-				
-				if(Main.map[x][y] == 1) {
-					blacks ++;
-				}
-				
-			}
-			
-		}
-		
 		Prog.placeMode.setText("<html>PlaceMode: " + Main.placeMode + " <span color='blue'>(P)</html>");
 		Prog.dragMode.setText("<html>AllowDrag: " + Main.drag + "</html>");
 		Prog.grid.setText("<html>Grid: " + Main.grid + "</html>");
 		Prog.circle.setText("<html>CursorCircle: " + Main.circle + "</html>");
 		
-		whites = (int) Math.pow(Main.mapSize, 2) - blacks;
-		
-		Prog.ams.setText("WhiteCount: " + whites + "\t|\tBlackCount: " + blacks + "\t|\tAntCount: " + Main.ants.size() + "\t|\tSpeed: " + Main.fps + "\t|\tCycles: " + Main.cycles);
+		Prog.ams.setText("|\tAntCount: " + Main.ants.size() + "\t|\tSpeed: " + Main.fps + "\t|\tCycles: " + Main.cycles + "\t|");
 		
 		Prog.drawPane.repaint();
 		

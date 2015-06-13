@@ -49,6 +49,8 @@ public class Func {
 					if(Prog.tick.isEnabled()) {
 						Main.aut.tick(true);
 					}
+				} else if(e.getKeyCode() == KeyEvent.VK_K) {
+					Main.ants.clear();
 				}
 			}
 			public void keyReleased(KeyEvent e) { }
@@ -189,6 +191,12 @@ public class Func {
 			}
 		});
 		
+		Prog.kill.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.ants.clear();
+			}
+		});
+		
 	}
 	
 	public static final void init() {
@@ -237,6 +245,8 @@ public class Func {
 	
 	public static final void clearMap() {
 		
+		Main.cycles = 0;
+		
 		for(int x = 0; x < Main.mapSize; x ++) {
 			
 			for(int y = 0; y < Main.mapSize; y ++) {
@@ -259,23 +269,28 @@ public class Func {
 	}
 	
 	public static void click(int button) {
-		int x = Main.mousePos.x / Main.tileSize;
-		int y = Main.mousePos.y / Main.tileSize;
-		if(button == 1) {
-			if(Main.placeMode == PlaceMode.NORMAL) {
-				Func.set(x, y);
-			} else {
-				if(!Func.antAt(x, y)) {
-					Main.ants.add(new Ant(x, y));
+		int tempX = Main.mousePos.x;
+		int tempY = Main.mousePos.y;
+		int size = Main.mapSize * Main.tileSize;
+		if(tempX > 0 && tempX < size && tempY > 0 && tempY < size) {
+			int x = Main.mousePos.x / Main.tileSize;
+			int y = Main.mousePos.y / Main.tileSize;
+			if(button == 1) {
+				if(Main.placeMode == PlaceMode.NORMAL) {
+					Func.set(x, y);
+				} else {
+					if(!Func.antAt(x, y)) {
+						Main.ants.add(new Ant(x, y));
+					}
 				}
-			}
-		} else if(button == 3) {
-			if(Main.placeMode == PlaceMode.NORMAL) {
-				Func.remove(x, y);
-			} else {
-				for(int i = 0; i < Main.ants.size(); i ++) {
-					if(Main.ants.get(i).x == x && Main.ants.get(i).y == y) {
-						Main.ants.remove(i);
+			} else if(button == 3) {
+				if(Main.placeMode == PlaceMode.NORMAL) {
+					Func.remove(x, y);
+				} else {
+					for(int i = 0; i < Main.ants.size(); i ++) {
+						if(Main.ants.get(i).x == x && Main.ants.get(i).y == y) {
+							Main.ants.remove(i);
+						}
 					}
 				}
 			}
@@ -324,6 +339,7 @@ public class Func {
 	}
 	
 	public static void loadMap() {
+		Main.playing = false;
 		File[] files = Main.fFolder.listFiles();
 		ArrayList<String> add = new ArrayList<String>();
 		for(int i = 0; i < files.length; i ++) {

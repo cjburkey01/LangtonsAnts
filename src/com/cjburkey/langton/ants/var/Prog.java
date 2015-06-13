@@ -5,8 +5,8 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import com.cjburkey.langton.ants.render.DrawPane;
 
@@ -17,7 +17,7 @@ public class Prog {
 	
 	public static JFrame tools = new JFrame();
 	public static JMenuBar menuBar = new JMenuBar();
-	public static JLabel ams = new JLabel();
+	public static JMenuItem ams = new JMenuItem();
 	
 	public static DrawPane drawPane = new DrawPane();
 
@@ -36,6 +36,7 @@ public class Prog {
 	public static JButton random;
 	public static JButton center;
 	public static JButton size;
+	public static JButton kill;
 	
 	public static final void init() {
 		
@@ -47,6 +48,7 @@ public class Prog {
 		tick = new JButton("<html>Cycle <span color='blue'>(T)</html>");
 		placeMode = new JButton("place");
 		clear = new JButton("<html><span color='red'>Clear</span> <span color='blue'>(C)</html>");
+		kill = new JButton("<html><span color='red'>Kill Ants</span> <span color='blue'>(K)</html>");
 		save = new JButton("<html>Save</html>");
 		load = new JButton("<html>Load</html>");
 		dragMode = new JButton("drag");
